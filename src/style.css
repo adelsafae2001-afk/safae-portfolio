@@ -7,7 +7,6 @@
   --blue: #1646b7;
   --red: #e34b37;
   --line: #d6d3ce;
-  --parallax: 0px;
 }
 * {
   box-sizing: border-box;
@@ -218,11 +217,10 @@ h1 span:hover {
   height: 100%;
   display: flex;
   align-items: center;
-  transform: translateY(var(--parallax));
 }
 .handnote {
   position: absolute;
-  top: 70px;
+  top: 10px;
   left: 10%;
   font:
     italic 21px/1.3 Georgia,
@@ -244,30 +242,45 @@ h1 span:hover {
 }
 .character-art {
   position: relative;
+  width: min(60%, 220px);
+  aspect-ratio: 174.91 / 319.02;
+  margin: 0 auto 24px;
 }
-.character-art > svg,
-.character-art > img {
+.character-illustration > svg {
   display: block;
   width: 100%;
-  height: 400px;
-  object-fit: contain;
+  height: auto;
+  overflow: visible;
 }
-.character-art .eyes {
+.character-art > .character-storyline {
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
 }
 .character figcaption {
+  position: relative;
   text-align: center;
   font-size: 10px;
   letter-spacing: 0.3px;
 }
-.character small {
-  display: block;
-  font-size: 10px;
-  line-height: 1.6;
-  color: #77716a;
-  margin: 8px auto 0;
-  max-width: 230px;
+/* Absolute SVG viewBox coordinates anchor each intact limb at its joint. */
+[data-limb] {
+  transform-box: view-box;
+}
+[data-limb="pencil"] {
+  transform-origin: 108px 135px;
+}
+[data-limb="nib"] {
+  transform-origin: 65px 132px;
+}
+[data-limb="left-leg"] {
+  transform-origin: 74px 208px;
+}
+[data-limb="right-leg"] {
+  transform-origin: 103px 207px;
 }
 .tiny-star {
   color: var(--red);
@@ -698,19 +711,68 @@ dialog::backdrop {
     opacity: 1;
     transform: translateY(0);
   }
-  .animated .eyes g {
-    animation: blink 6s infinite;
-    transform-origin: center;
+  .animated [data-limb="pencil"] {
+    animation: pencil-drawing 4.8s ease-in-out infinite;
   }
-  @keyframes blink {
+  .animated [data-limb="nib"] {
+    animation: nib-greeting 6s ease-in-out infinite;
+  }
+  .animated [data-limb="left-leg"] {
+    animation: left-step 1.8s ease-in-out 1;
+  }
+  .animated [data-limb="right-leg"] {
+    animation: right-step 1.8s ease-in-out 1;
+  }
+  @keyframes pencil-drawing {
     0%,
-    44%,
-    48%,
+    50%,
     100% {
-      scale: 1 1;
+      transform: rotate(0deg);
     }
-    46% {
-      scale: 1 0.1;
+    25% {
+      transform: rotate(-1.5deg);
+    }
+    75% {
+      transform: rotate(1.5deg);
+    }
+  }
+  @keyframes nib-greeting {
+    0%,
+    45%,
+    100% {
+      transform: rotate(0deg);
+    }
+    15% {
+      transform: rotate(2deg);
+    }
+    30% {
+      transform: rotate(-1deg);
+    }
+  }
+  @keyframes left-step {
+    0%,
+    50%,
+    100% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(2deg);
+    }
+    75% {
+      transform: rotate(-2deg);
+    }
+  }
+  @keyframes right-step {
+    0%,
+    50%,
+    100% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(-2deg);
+    }
+    75% {
+      transform: rotate(2deg);
     }
   }
 }
@@ -722,9 +784,6 @@ html[data-motion="false"] *:before,
 html[data-motion="false"] *:after {
   animation: none !important;
   transition: none !important;
-}
-.hero-visual {
-  will-change: transform;
 }
 @media (min-width: 1600px) {
   main,
@@ -747,13 +806,12 @@ html[data-motion="false"] *:after {
   h1 {
     font-size: 10vw;
   }
-  .character-art > svg,
-  .character-art > img {
-    height: 350px;
+  .character-art {
+    width: min(60%, 192px);
   }
   .handnote {
     font-size: 18px;
-    top: 65px;
+    top: 10px;
   }
   .projects {
     gap: 45px 30px;
@@ -826,7 +884,7 @@ html[data-motion="false"] *:after {
     padding: 12px 18px;
   }
   .hero-visual {
-    min-height: 330px;
+    min-height: 420px;
     transform: none;
   }
   .handnote {
@@ -841,17 +899,14 @@ html[data-motion="false"] *:after {
     margin: 4px 0 0 60px;
   }
   .character {
-    padding-top: 20px;
+    padding-top: 110px;
   }
-  .character-art > svg,
-  .character-art > img {
-    height: 260px;
+  .character-art {
+    width: min(48%, 143px);
+    margin-bottom: 18px;
   }
   .character figcaption {
     font-size: 9px;
-  }
-  .character small {
-    display: none;
   }
   .hero-bottom {
     margin-top: 20px;

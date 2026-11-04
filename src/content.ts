@@ -11,10 +11,9 @@ export const content = {
     explore: "Explore my work",
     scroll: "SCROLL TO UNFOLD",
     chapter: "A PORTFOLIO IN FIVE CHAPTERS",
-    character: "A little space for a character with a story to tell.",
-    placeholder: "Original character coming soon",
+    character: "One line. A world of possibilities.",
     characterAlt:
-      "Abstract linework placeholder reserved for Safae’s original character",
+      "Safae’s original illustrated character, with dark hair, red cheeks, a pencil arm and a pen-nib arm",
     motion: "Motion",
     on: "On",
     off: "Off",
@@ -86,10 +85,9 @@ export const content = {
     explore: "Découvrir mes projets",
     scroll: "DÉFILER POUR DÉCOUVRIR",
     chapter: "UN PORTFOLIO EN CINQ CHAPITRES",
-    character:
-      "Une petite place pour un personnage qui a une histoire à raconter.",
-    placeholder: "Personnage original à venir",
-    characterAlt: "Tracé abstrait réservé au personnage original de Safae",
+    character: "Une ligne. Un monde de possibles.",
+    characterAlt:
+      "Personnage original de Safae, aux cheveux foncés et aux joues rouges, avec un bras crayon et un bras plume",
     motion: "Animations",
     on: "Oui",
     off: "Non",
@@ -172,10 +170,3 @@ export const projects: Project[] = [
 ];
 // Add only verified contact URLs and an existing CV file. Empty values render as unavailable.
 export const contactLinks = { email: "", linkedin: "", behance: "", cv: "" };
-export const characterAssets: {
-  main: string;
-  curious: string;
-  playful: string;
-  motif: string;
-  eyes: boolean;
-} = { main: "", curious: "", playful: "", motif: "", eyes: false };

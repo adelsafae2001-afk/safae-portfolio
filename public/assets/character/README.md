@@ -1,1 +1,1 @@
-Place Safae’s supplied original artwork here. Configure main, curious, playful and motif paths in src/content.ts. SVG preferred; no replacement character is included.
+The final original character is public/Asset 2.svg. It is integrated directly without edits. See the root README for limb animation structure and accessibility controls. Do not add alternative facial expressions or eye overlays.

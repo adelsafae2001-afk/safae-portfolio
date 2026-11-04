@@ -30,7 +30,13 @@ Edit `projects` in `src/content.ts`. Each item has a unique ID, category index (
 
 ### Original character
 
-Place transparent SVG or WebP files in `public/assets/character/`. Set `characterAssets.main`, `.curious`, `.playful`, and `.motif` to their asset paths. No generic character has been substituted: the initial abstract line reserves the space for Safae’s drawing. Hover selects the curious asset; tapping/clicking selects playful. The component falls back to the main artwork if a variant is absent. Optional eye overlay is enabled with `eyes: true`; adapt its coordinates in `src/components/Character.tsx` to the supplied face. That overlay supports blinking and pointer tracking. A motif asset slot is prepared; integrate it with the narrative SVG when delivered. Expression changes convey no essential information, so the figure stays outside keyboard tab order. The visible motion control and OS reduced-motion preference disable reactions and movement.
+The final illustration is `public/Asset 2.svg`, used directly by `src/components/Character.tsx` through Vite’s raw import. The uploaded SVG file remains byte-for-byte unchanged. There are no alternative expressions, eye overlays or pointer-tracking facial effects.
+
+Inspection found nine sibling groups inside `#Layer_1-2 > g`: neck, head/hair/face, pencil arm, pen-nib arm, left leg, right leg, lower clothing, flowing clothing, and torso. The component adds `data-limb` attributes only to the four existing limb groups after validating their path prefixes. It never splits, redraws, recolours or reorders paths. Clipping paths stay attached to their original artwork. If the expected structure changes, animation fails safely to a still illustration.
+
+CSS in `src/style.css` rotates each intact arm slightly around its attachment point: pencil ±1.5° over 4.8 seconds; pen-nib +2°/−1° over 6 seconds with a rest. The legs take two small opposing steps (±2°), once on entrance over 1.8 seconds. No scaling, stretching, morphing or head/torso movement is applied. The old whole-hero parallax was removed so only the limbs articulate. A separate decorative line meets the pencil tip at its resting position and draws itself on load. Both the visible Motion toggle and the operating system’s reduced-motion setting disable all character animation.
+
+To adjust placement, edit the character-specific CSS, not the SVG paths or colours. The SVG is imported inline so its original limb groups can be addressed without a library. Its XML prolog alone is omitted for HTML embedding. Treat this as trusted, repository-owned artwork; do not inject untrusted remote SVG markup.
 
 ### Contact and CV
 
@@ -40,17 +46,30 @@ Set `contactLinks.email` to an email address, and `linkedin`/`behance` to verifi
 
 The timeline is in `src/main.tsx`; all display strings are in `src/content.ts`. Confirm roles at Orange Creative and MADP, dates/details for other experiences, and add only verified information. Confirm the wording of degrees and doctoral research before publication.
 
+## Preview the character in GitHub Codespaces
+
+Open a Codespace on `feat/one-line-portfolio`. If you already have one, stop its running server with Ctrl+C, then run in its terminal:
+
+```sh
+git switch feat/one-line-portfolio
+git pull --ff-only origin feat/one-line-portfolio
+npm ci
+npm run dev
+```
+
+Click **Open in Browser**, or open the **Ports** tab and click the globe beside **5173**. Keep port visibility **Private**. Check desktop and narrow/mobile widths, EN/FR, and the Motion toggle. With motion off, the exact original pose should remain visible. This is a development preview, not a deployment.
+
 ## Review before merging
 
 Work is isolated on `feat/one-line-portfolio`. Review with `git diff main...feat/one-line-portfolio` (use the actual default branch if different). Run the build and inspect both languages, filters, each project dialog, Escape to close, keyboard navigation, mobile layout and reduced motion. Push the feature branch and open a pull request when ready; merge only after review. No deployment configuration or publishing action is included.
 
 ## Still needed
 
-- Main original character, curious/playful expressions and flowing-line motif.
+- Optional original flowing-line motif (the final character is integrated; no alternative expressions are needed).
 - Six real project titles, categories, briefs, roles, process documentation, covers, final artwork and alt text, in English and French.
 - Verified professional details for timeline entries.
 - Email, LinkedIn, Behance and downloadable CV PDF.
 
 ## Implementation
 
-Reusable character, artwork and dialog components; native modal focus management; semantic landmarks; visible focus; touch-friendly controls; reduced motion; scroll reveals and subtle hero parallax. The palette is ivory `#F6F4F0`, ink `#171717`, cobalt `#1646B7` and sparing vermilion `#E34B37`. Layout graphics are inline SVG, and no image-generation service was used.
+Reusable character, artwork and dialog components; native modal focus management; semantic landmarks; visible focus; touch-friendly controls; reduced motion; scroll reveals and subtle limb-only character animation. The palette is ivory `#F6F4F0`, ink `#171717`, cobalt `#1646B7` and sparing vermilion `#E34B37`. Layout graphics are inline SVG, and no image-generation service was used.

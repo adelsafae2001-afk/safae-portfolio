@@ -1,61 +1,66 @@
-import { useState } from "react";
-import { characterAssets, content, type Lang } from "../content";
+import { useEffect, useRef } from "react";
+import originalCharacter from "../../public/Asset 2.svg?raw";
+import { content, type Lang } from "../content";
+
+// Use the uploaded SVG verbatim. Only the XML prolog is omitted for inline HTML.
+const artwork = originalCharacter.replace(/<\?xml[^?]*\?>\s*/, "");
+
 export function Character({ lang, motion }: { lang: Lang; motion: boolean }) {
-  const [expression, setExpression] = useState<"main" | "curious" | "playful">(
-    "main",
-  );
-  const [eye, setEye] = useState({ x: 0, y: 0 });
+  const illustration = useRef<HTMLDivElement>(null);
   const c = content[lang];
-  const src = characterAssets[expression] || characterAssets.main;
+
+  useEffect(() => {
+    // Illustrator already exported each complete limb as a separate sibling.
+    // Keep their paths, clipping, colours, order and all non-limb groups intact.
+    const parts =
+      illustration.current?.querySelector("#Layer_1-2 > g")?.children;
+    if (!parts || parts.length !== 9) return; // Fail still if the asset changes.
+    const limbs = [
+      [2, "pencil", "M106.42,129.4"],
+      [3, "nib", "M2.89,228.94"],
+      [4, "left-leg", "M85.45,207.6"],
+      [5, "right-leg", "M93.11,201.74"],
+    ] as const;
+    const valid = limbs.every(([index, , prefix]) =>
+      parts[index].querySelector("path")?.getAttribute("d")?.startsWith(prefix),
+    );
+    if (!valid) return;
+    limbs.forEach(([index, name]) =>
+      parts[index].setAttribute("data-limb", name),
+    );
+    return () =>
+      limbs.forEach(([index]) => parts[index].removeAttribute("data-limb"));
+  }, []);
+
   return (
-    <figure
-      className={`character ${motion ? "animated" : ""}`}
-      onPointerMove={(e) => {
-        if (!motion) return;
-        const r = e.currentTarget.getBoundingClientRect();
-        setEye({
-          x: (e.clientX - r.left - r.width / 2) / 40,
-          y: (e.clientY - r.top - r.height / 2) / 40,
-        });
-      }}
-      onPointerEnter={() => motion && setExpression("curious")}
-      onPointerLeave={() => {
-        setExpression("main");
-        setEye({ x: 0, y: 0 });
-      }}
-      onClick={() =>
-        motion && setExpression(expression === "playful" ? "main" : "playful")
-      }
-    >
+    <figure className={`character ${motion ? "animated" : ""}`}>
       <div className="character-art" role="img" aria-label={c.characterAlt}>
-        {src ? (
-          <>
-            <img src={src} alt="" />
-            {characterAssets.eyes && (
-              <svg className="eyes" viewBox="0 0 500 500" aria-hidden="true">
-                <g style={{ transform: `translate(${eye.x}px,${eye.y}px)` }}>
-                  <ellipse cx="240" cy="200" rx="2" ry="5" />
-                  <ellipse cx="260" cy="200" rx="2" ry="5" />
-                </g>
-              </svg>
-            )}
-          </>
-        ) : (
-          <svg viewBox="0 0 500 500" fill="none" aria-hidden="true">
-            <path
-              className="draw-line"
-              d="M-30 360 C30 350 55 420 120 395 C190 365 140 260 220 268 C295 276 205 410 300 385 C405 357 285 229 280 166 C274 80 390 68 408 145 C429 236 281 242 244 184 C200 115 290 43 345 88 C380 118 355 175 310 162 C255 146 330 115 354 196 C375 274 403 329 511 275"
-              stroke="currentColor"
-              strokeWidth="1.7"
-              strokeLinecap="round"
-            />
-            <circle cx="125" cy="395" r="5" fill="#E34B37" stroke="none" />
-          </svg>
-        )}
+        <svg
+          className="character-storyline"
+          viewBox="0 0 174.91 319.02"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            className="draw-line"
+            d="M174.2 72.6 C218 48 222 173 202 224 C181 278 130 285 91 268 C40 245 0 254 -66 299"
+            stroke="#171717"
+            strokeWidth="0.65"
+            strokeLinecap="round"
+          />
+        </svg>
+        <div
+          className="character-illustration"
+          ref={illustration}
+          aria-hidden="true"
+          dangerouslySetInnerHTML={{ __html: artwork }}
+        />
       </div>
       <figcaption>
-        <span className="tiny-star">✳</span> {c.placeholder}
-        <small>{c.character}</small>
+        <span className="tiny-star" aria-hidden="true">
+          ✳
+        </span>{" "}
+        {c.character}
       </figcaption>
     </figure>
   );

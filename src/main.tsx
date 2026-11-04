@@ -150,25 +150,6 @@ function App() {
       .forEach((el) => obs.observe(el));
     return () => obs.disconnect();
   }, []);
-  useEffect(() => {
-    if (!motion) return;
-    let frame = 0;
-    const scroll = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() =>
-        document.documentElement.style.setProperty(
-          "--parallax",
-          `${Math.min(window.scrollY * 0.06, 60)}px`,
-        ),
-      );
-    };
-    window.addEventListener("scroll", scroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", scroll);
-      cancelAnimationFrame(frame);
-      document.documentElement.style.setProperty("--parallax", "0px");
-    };
-  }, [motion]);
   return (
     <>
       <a className="skip" href="#main">
