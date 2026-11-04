@@ -742,6 +742,81 @@ dialog::backdrop {
   .animated.character-entrance [data-limb="right-leg"] {
     animation: right-step 1.8s ease-in-out 1;
   }
+  /* Idle loops start and end at neutral, so entrance and pop can hand back
+     without a pose jump. Different periods keep the balancing motion organic. */
+  .animated.character-idle .character-illustration > svg {
+    animation: idle-float 4.6s ease-in-out infinite;
+  }
+  .animated.character-idle [data-limb="pencil"] {
+    animation: idle-sketch 3.7s ease-in-out infinite;
+  }
+  .animated.character-idle [data-limb="nib"] {
+    animation: idle-nib 7.4s ease-in-out infinite;
+  }
+  .animated.character-idle [data-limb="left-leg"] {
+    animation: idle-left-leg 5.3s ease-in-out infinite;
+  }
+  .animated.character-idle [data-limb="right-leg"] {
+    animation: idle-right-leg 5.9s ease-in-out infinite;
+  }
+  @keyframes idle-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-4px);
+    }
+  }
+  @keyframes idle-sketch {
+    0%,
+    100% {
+      transform: rotate(0deg);
+    }
+    28% {
+      transform: rotate(-1.6deg);
+    }
+    65% {
+      transform: rotate(1.2deg);
+    }
+  }
+  @keyframes idle-nib {
+    0%,
+    50%,
+    100% {
+      transform: rotate(0deg);
+    }
+    66% {
+      transform: rotate(1.8deg);
+    }
+    82% {
+      transform: rotate(-0.8deg);
+    }
+  }
+  @keyframes idle-left-leg {
+    0%,
+    100% {
+      transform: rotate(0deg);
+    }
+    30% {
+      transform: rotate(1.2deg);
+    }
+    70% {
+      transform: rotate(-0.7deg);
+    }
+  }
+  @keyframes idle-right-leg {
+    0%,
+    100% {
+      transform: rotate(0deg);
+    }
+    30% {
+      transform: rotate(-1.2deg);
+    }
+    70% {
+      transform: rotate(0.7deg);
+    }
+  }
   /* One shared duration keeps the pop, limbs and doodle in sync. */
   .animated.character-play {
     --gesture-duration: 1.05s;

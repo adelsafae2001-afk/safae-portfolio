@@ -7,7 +7,7 @@ const artwork = originalCharacter.replace(/<\?xml[^?]*\?>\s*/, "");
 
 export function Character({ lang, motion }: { lang: Lang; motion: boolean }) {
   const illustration = useRef<HTMLButtonElement>(null);
-  type Phase = "entrance" | "idle" | "play";
+  type Phase = "entrance" | "idle" | "settle" | "play";
   const [phase, setPhase] = useState<Phase>(() =>
     motion && !window.matchMedia("(prefers-reduced-motion: reduce)").matches
       ? "entrance"
@@ -16,6 +16,13 @@ export function Character({ lang, motion }: { lang: Lang; motion: boolean }) {
   const phaseRef = useRef(phase);
   const pendingGesture = useRef(false);
   const pointerType = useRef("mouse");
+  const handoff = useRef<Animation[]>([]);
+  const handoffVersion = useRef(0);
+  const cancelHandoff = () => {
+    handoffVersion.current += 1;
+    handoff.current.forEach((animation) => animation.cancel());
+    handoff.current = [];
+  };
   const changePhase = (next: Phase) => {
     phaseRef.current = next;
     setPhase(next);
@@ -29,7 +36,50 @@ export function Character({ lang, motion }: { lang: Lang; motion: boolean }) {
     if (phaseRef.current === "entrance") {
       pendingGesture.current = true;
     } else if (phaseRef.current === "idle") {
-      changePhase("play");
+      // Sample the current idle pose before removing its CSS animations. A brief
+      // handoff returns it to neutral without modifying the approved pop frames.
+      const elements = illustration.current?.querySelectorAll<SVGElement>(
+        ":scope > svg, [data-limb]",
+      );
+      if (
+        !elements ||
+        !Array.from(elements).every(
+          (element) => typeof element.animate === "function",
+        )
+      ) {
+        changePhase("play");
+        return;
+      }
+      const poses = Array.from(elements, (element) => ({
+        element,
+        transform: window.getComputedStyle(element).transform,
+      }));
+      const version = ++handoffVersion.current;
+      changePhase("settle");
+      handoff.current = poses.map(({ element, transform }) =>
+        element.animate([{ transform }, { transform: "none" }], {
+          duration: 180,
+          easing: "ease-out",
+          fill: "both",
+        }),
+      );
+      void Promise.all(
+        handoff.current.map((animation) => animation.finished),
+      ).then(
+        () => {
+          if (
+            version !== handoffVersion.current ||
+            phaseRef.current !== "settle"
+          )
+            return;
+          handoff.current.forEach((animation) => animation.cancel());
+          handoff.current = [];
+          changePhase("play");
+        },
+        () => {
+          /* Cancellation is expected when motion is disabled. */
+        },
+      );
     }
   };
 
@@ -38,6 +88,7 @@ export function Character({ lang, motion }: { lang: Lang; motion: boolean }) {
     const stop = () => {
       if (!motion || preference.matches) {
         pendingGesture.current = false;
+        cancelHandoff();
         phaseRef.current = "idle";
         setPhase("idle");
       }
@@ -46,6 +97,7 @@ export function Character({ lang, motion }: { lang: Lang; motion: boolean }) {
     preference.addEventListener("change", stop);
     return () => preference.removeEventListener("change", stop);
   }, [motion]);
+  useEffect(() => () => cancelHandoff(), []);
   const c = content[lang];
 
   useEffect(() => {
