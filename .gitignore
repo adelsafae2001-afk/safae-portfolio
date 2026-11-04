@@ -147,3 +147,9 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# Local build and scratch output
+node_modules/
+dist/
+work/
+*.tsbuildinfo
