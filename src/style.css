@@ -246,6 +246,19 @@ h1 span:hover {
   aspect-ratio: 174.91 / 319.02;
   margin: 0 auto 24px;
 }
+.character-illustration {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  line-height: 0;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.character-illustration[aria-disabled="true"] {
+  cursor: default;
+}
 .character-illustration > svg {
   display: block;
   width: 100%;
@@ -711,42 +724,76 @@ dialog::backdrop {
     opacity: 1;
     transform: translateY(0);
   }
-  .animated [data-limb="pencil"] {
-    animation: pencil-drawing 4.8s ease-in-out infinite;
-  }
-  .animated [data-limb="nib"] {
-    animation: nib-greeting 6s ease-in-out infinite;
-  }
-  .animated [data-limb="left-leg"] {
+  .animated.character-entrance [data-limb="left-leg"] {
     animation: left-step 1.8s ease-in-out 1;
   }
-  .animated [data-limb="right-leg"] {
+  .animated.character-entrance [data-limb="right-leg"] {
     animation: right-step 1.8s ease-in-out 1;
   }
-  @keyframes pencil-drawing {
+  .animated.character-play [data-limb="pencil"] {
+    animation: playful-pencil 1.4s ease-in-out 1;
+  }
+  .animated.character-play [data-limb="nib"] {
+    animation: playful-nib 1.4s ease-in-out 1;
+  }
+  .animated.character-play [data-limb="left-leg"] {
+    animation: playful-left-leg 1.4s ease-in-out 1;
+  }
+  .animated.character-play [data-limb="right-leg"] {
+    animation: playful-right-leg 1.4s ease-in-out 1;
+  }
+  @keyframes playful-pencil {
     0%,
-    50%,
     100% {
       transform: rotate(0deg);
     }
     25% {
-      transform: rotate(-1.5deg);
+      transform: rotate(-3deg);
     }
-    75% {
-      transform: rotate(1.5deg);
+    55% {
+      transform: rotate(2deg);
+    }
+    78% {
+      transform: rotate(-1deg);
     }
   }
-  @keyframes nib-greeting {
+  @keyframes playful-nib {
     0%,
-    45%,
     100% {
       transform: rotate(0deg);
     }
-    15% {
-      transform: rotate(2deg);
-    }
     30% {
+      transform: rotate(3deg);
+    }
+    60% {
+      transform: rotate(-2deg);
+    }
+    80% {
+      transform: rotate(1deg);
+    }
+  }
+  @keyframes playful-left-leg {
+    0%,
+    100% {
+      transform: rotate(0deg);
+    }
+    40% {
+      transform: rotate(3deg);
+    }
+    70% {
       transform: rotate(-1deg);
+    }
+  }
+  @keyframes playful-right-leg {
+    0%,
+    100% {
+      transform: rotate(0deg);
+    }
+    40% {
+      transform: rotate(-3deg);
+    }
+    70% {
+      transform: rotate(1deg);
     }
   }
   @keyframes left-step {

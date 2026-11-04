@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import originalCharacter from "../../public/Asset 2.svg?raw";
 import { content, type Lang } from "../content";
 
@@ -6,7 +6,46 @@ import { content, type Lang } from "../content";
 const artwork = originalCharacter.replace(/<\?xml[^?]*\?>\s*/, "");
 
 export function Character({ lang, motion }: { lang: Lang; motion: boolean }) {
-  const illustration = useRef<HTMLDivElement>(null);
+  const illustration = useRef<HTMLButtonElement>(null);
+  type Phase = "entrance" | "idle" | "play";
+  const [phase, setPhase] = useState<Phase>(() =>
+    motion && !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "entrance"
+      : "idle",
+  );
+  const phaseRef = useRef(phase);
+  const pendingGesture = useRef(false);
+  const pointerType = useRef("mouse");
+  const changePhase = (next: Phase) => {
+    phaseRef.current = next;
+    setPhase(next);
+  };
+  const requestGesture = () => {
+    if (
+      !motion ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    )
+      return;
+    if (phaseRef.current === "entrance") {
+      pendingGesture.current = true;
+    } else if (phaseRef.current === "idle") {
+      changePhase("play");
+    }
+  };
+
+  useEffect(() => {
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const stop = () => {
+      if (!motion || preference.matches) {
+        pendingGesture.current = false;
+        phaseRef.current = "idle";
+        setPhase("idle");
+      }
+    };
+    stop();
+    preference.addEventListener("change", stop);
+    return () => preference.removeEventListener("change", stop);
+  }, [motion]);
   const c = content[lang];
 
   useEffect(() => {
@@ -33,8 +72,10 @@ export function Character({ lang, motion }: { lang: Lang; motion: boolean }) {
   }, []);
 
   return (
-    <figure className={`character ${motion ? "animated" : ""}`}>
-      <div className="character-art" role="img" aria-label={c.characterAlt}>
+    <figure
+      className={`character ${motion ? "animated" : ""} character-${phase}`}
+    >
+      <div className="character-art">
         <svg
           className="character-storyline"
           viewBox="0 0 174.91 319.02"
@@ -49,10 +90,40 @@ export function Character({ lang, motion }: { lang: Lang; motion: boolean }) {
             strokeLinecap="round"
           />
         </svg>
-        <div
+        <button
+          type="button"
           className="character-illustration"
           ref={illustration}
-          aria-hidden="true"
+          aria-label={`${c.characterAction}. ${c.characterAlt}`}
+          aria-disabled={!motion}
+          onPointerEnter={(event) => {
+            if (event.pointerType === "mouse") requestGesture();
+          }}
+          onPointerDown={(event) => {
+            pointerType.current = event.pointerType;
+          }}
+          onClick={(event) => {
+            // Native button clicks cover Enter, Space and assistive technology.
+            // Mouse hover already triggers the gesture; suppress its extra click.
+            if (event.detail === 0 || pointerType.current !== "mouse")
+              requestGesture();
+          }}
+          onAnimationEnd={(event) => {
+            // Only the last limb signals completion, never the storyline SVG.
+            if (
+              event.animationName === "right-step" &&
+              phaseRef.current === "entrance"
+            ) {
+              const play = pendingGesture.current;
+              pendingGesture.current = false;
+              changePhase(play ? "play" : "idle");
+            } else if (
+              event.animationName === "playful-right-leg" &&
+              phaseRef.current === "play"
+            ) {
+              changePhase("idle");
+            }
+          }}
           dangerouslySetInnerHTML={{ __html: artwork }}
         />
       </div>

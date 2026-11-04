@@ -12,6 +12,7 @@ export const content = {
     scroll: "SCROLL TO UNFOLD",
     chapter: "A PORTFOLIO IN FIVE CHAPTERS",
     character: "One line. A world of possibilities.",
+    characterAction: "Animate the character",
     characterAlt:
       "Safae’s original illustrated character, with dark hair, red cheeks, a pencil arm and a pen-nib arm",
     motion: "Motion",
@@ -86,6 +87,7 @@ export const content = {
     scroll: "DÉFILER POUR DÉCOUVRIR",
     chapter: "UN PORTFOLIO EN CINQ CHAPITRES",
     character: "Une ligne. Un monde de possibles.",
+    characterAction: "Animer le personnage",
     characterAlt:
       "Personnage original de Safae, aux cheveux foncés et aux joues rouges, avec un bras crayon et un bras plume",
     motion: "Animations",

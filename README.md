@@ -34,7 +34,11 @@ The final illustration is `public/Asset 2.svg`, used directly by `src/components
 
 Inspection found nine sibling groups inside `#Layer_1-2 > g`: neck, head/hair/face, pencil arm, pen-nib arm, left leg, right leg, lower clothing, flowing clothing, and torso. The component adds `data-limb` attributes only to the four existing limb groups after validating their path prefixes. It never splits, redraws, recolours or reorders paths. Clipping paths stay attached to their original artwork. If the expected structure changes, animation fails safely to a still illustration.
 
-CSS in `src/style.css` rotates each intact arm slightly around its attachment point: pencil ±1.5° over 4.8 seconds; pen-nib +2°/−1° over 6 seconds with a rest. The legs take two small opposing steps (±2°), once on entrance over 1.8 seconds. No scaling, stretching, morphing or head/torso movement is applied. The old whole-hero parallax was removed so only the limbs articulate. A separate decorative line meets the pencil tip at its resting position and draws itself on load. Both the visible Motion toggle and the operating system’s reduced-motion setting disable all character animation.
+The existing entrance step (opposing leg rotations of ±2° over 1.8 seconds) and storyline drawing are preserved. After entrance, the character rests in her original pose. Hovering the character with a mouse triggers one 1.4-second gesture: a small pencil-arm drawing/wave (−3° to +2°), a gentle pen-nib wave (+3° to −2°), and tiny opposing leg kicks (up to ±3°). Every limb smoothly finishes at 0°. The old continuous arm loops are replaced by this deliberate interaction.
+
+The illustration is a native button, preserving its dimensions and placement. Tap it on touchscreens, or focus it with Tab and press Enter/Space. Its action label is translated in EN/FR, and a pointer cursor indicates interactivity. Pointer entry triggers once; moving inside never restarts the gesture. Leaving and re-entering can play it again once it finishes. Activations during a gesture are ignored; an activation during entrance is queued until the entrance step finishes. Mouse clicks do not double-trigger the hover gesture.
+
+Only complete limb groups rotate; no scaling, stretching, morphing or head/torso movement is applied. The separate decorative line still meets the pencil tip at its resting position. Both Motion Off and the operating system’s reduced-motion preference disable animation and clear queued gestures, including when changed during playback. Turning motion back on leaves the character still until the next interaction.
 
 To adjust placement, edit the character-specific CSS, not the SVG paths or colours. The SVG is imported inline so its original limb groups can be addressed without a library. Its XML prolog alone is omitted for HTML embedding. Treat this as trusted, repository-owned artwork; do not inject untrusted remote SVG markup.
 
@@ -57,7 +61,7 @@ npm ci
 npm run dev
 ```
 
-Click **Open in Browser**, or open the **Ports** tab and click the globe beside **5173**. Keep port visibility **Private**. Check desktop and narrow/mobile widths, EN/FR, and the Motion toggle. With motion off, the exact original pose should remain visible. This is a development preview, not a deployment.
+Click **Open in Browser**, or open the **Ports** tab and click the globe beside **5173**. Keep port visibility **Private**. Check desktop and narrow/mobile widths, EN/FR, mouse hover, tap, Tab then Enter/Space, and the Motion toggle. With motion off, the exact original pose should remain visible. This is a development preview, not a deployment.
 
 ## Review before merging
 
