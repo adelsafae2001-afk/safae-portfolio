@@ -52,7 +52,9 @@ export function ProjectCaseStudy({
       <article>
         <p className="eyebrow">
           {project
-            ? `${project.id} / ${isResearchPreview(project) ? c.researchNote : c.caseNote}`
+            ? isResearchPreview(project)
+              ? c.researchNote
+              : c.caseNote
             : "404"}
         </p>
         <h1 className="case-page-title" ref={heading} tabIndex={-1}>

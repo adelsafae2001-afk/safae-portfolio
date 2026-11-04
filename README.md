@@ -26,7 +26,7 @@ The build is in `dist/`. Preview at desktop, tablet and mobile widths. External 
 
 ### Projects
 
-Edit `projects` in `src/data/projects.ts`. Each record has a stable `id` and `slug`, bilingual `title` and `categoryLabel`, a filter category, `collection` (`selected` or `playground`), numeric `order`, and a decorative card `treatment`/`tone`. These nine records use only supplied project names/categories. All numbered frames are clearly labelled neutral placeholders, not claimed project artwork.
+Edit `projects` in `src/data/projects.ts`. Each record has a stable `id` and `slug`, bilingual `title` and `categoryLabel`, a filter category, `collection` (`selected` or `playground`), numeric `order`, and a decorative card `treatment`/`tone`. These nine records use only supplied project names/categories. All frames are clearly labelled neutral placeholders, not claimed project artwork. Project IDs remain internal data keys only; cards, placeholders and case-study pages display no project numbering.
 
 Standard projects use `kind: 'case-study'`. Add bilingual `concept`, `role`, and `process` fields only when supplied. Add `cover` and `images` with `{ src: '/assets/projects/example.webp', alt: { en: 'Describe the image', fr: 'Décrire l’image' }, caption: { en: 'Optional caption', fr: 'Légende facultative' } }`. Put optimized, approved artwork in `public/assets/projects/`. Images are displayed without cropping; cards load lazily. Never put confidential files anywhere in `public/` because Vite copies that entire directory to the build.
 

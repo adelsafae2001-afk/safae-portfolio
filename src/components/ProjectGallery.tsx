@@ -36,11 +36,9 @@ export function ProjectPreview({
       ) : (
         <>
           <span className="preview-registration" aria-hidden="true">
-            {project.id} / SA
+            SA
           </span>
-          <span className="preview-frame" aria-hidden="true">
-            <span>{project.id}</span>
-          </span>
+          <span className="preview-frame" aria-hidden="true" />
           <span className="preview-placeholder">
             {c.imagePlaceholder}
             <small>{c.imageNote}</small>
@@ -72,9 +70,7 @@ export function ProjectGallery({
       aria-labelledby={`${collection}-title`}
     >
       <div className="section-top">
-        <p className="eyebrow">
-          {selected ? "01 / " + c.selected : "01.2 / " + c.playground}
-        </p>
+        <p className="eyebrow">{selected ? c.selected : c.playground}</p>
         <span aria-hidden="true">↘</span>
       </div>
       <div className="section-heading">
@@ -114,9 +110,7 @@ export function ProjectGallery({
             >
               <ProjectPreview project={p} lang={lang} />
               <div className="gallery-card-meta">
-                <span className="gallery-index" aria-hidden="true">
-                  {p.id}
-                </span>
+                <span className="gallery-index" aria-hidden="true" />
                 <div>
                   <h3>{p.title[lang]}</h3>
                   <p>{p.categoryLabel[lang]}</p>
