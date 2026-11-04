@@ -109,7 +109,7 @@ export function Character({ lang, motion }: { lang: Lang; motion: boolean }) {
               requestGesture();
           }}
           onAnimationEnd={(event) => {
-            // Only the last limb signals completion, never the storyline SVG.
+            // The body pop completes the gesture; entrance still waits for its last leg.
             if (
               event.animationName === "right-step" &&
               phaseRef.current === "entrance"
@@ -118,7 +118,7 @@ export function Character({ lang, motion }: { lang: Lang; motion: boolean }) {
               pendingGesture.current = false;
               changePhase(play ? "play" : "idle");
             } else if (
-              event.animationName === "playful-right-leg" &&
+              event.animationName === "character-pop" &&
               phaseRef.current === "play"
             ) {
               changePhase("idle");
@@ -126,6 +126,18 @@ export function Character({ lang, motion }: { lang: Lang; motion: boolean }) {
           }}
           dangerouslySetInnerHTML={{ __html: artwork }}
         />
+        <svg
+          className="character-doodle"
+          viewBox="0 0 174.91 319.02"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1"
+          strokeLinecap="round"
+          aria-hidden="true"
+        >
+          <path d="M181 54 C188 34 213 32 207 45 C202 54 192 46 200 38" />
+          <path d="M218 47 V55 M214 51 H222 M187 27 V33 M184 30 H190" />
+        </svg>
       </div>
       <figcaption>
         <span className="tiny-star" aria-hidden="true">

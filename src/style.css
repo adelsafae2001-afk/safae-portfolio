@@ -264,6 +264,7 @@ h1 span:hover {
   width: 100%;
   height: auto;
   overflow: visible;
+  transform-origin: 50% 60%;
 }
 .character-art > .character-storyline {
   position: absolute;
@@ -272,6 +273,17 @@ h1 span:hover {
   height: 100%;
   overflow: visible;
   pointer-events: none;
+}
+.character-doodle {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  opacity: 0;
+  pointer-events: none;
+  stroke-dasharray: 90;
+  stroke-dashoffset: 90;
 }
 .character figcaption {
   position: relative;
@@ -730,31 +742,91 @@ dialog::backdrop {
   .animated.character-entrance [data-limb="right-leg"] {
     animation: right-step 1.8s ease-in-out 1;
   }
+  /* One shared duration keeps the pop, limbs and doodle in sync. */
+  .animated.character-play {
+    --gesture-duration: 1.05s;
+  }
+  .animated.character-play .character-illustration > svg {
+    animation: character-pop var(--gesture-duration)
+      cubic-bezier(0.22, 0.7, 0.25, 1) 1;
+  }
+  .animated.character-play .character-doodle {
+    animation: pencil-doodle var(--gesture-duration) ease-out 1;
+  }
   .animated.character-play [data-limb="pencil"] {
-    animation: playful-pencil 1.4s ease-in-out 1;
+    animation: playful-pencil var(--gesture-duration) ease-in-out 1;
   }
   .animated.character-play [data-limb="nib"] {
-    animation: playful-nib 1.4s ease-in-out 1;
+    animation: playful-nib var(--gesture-duration) ease-in-out 1;
   }
   .animated.character-play [data-limb="left-leg"] {
-    animation: playful-left-leg 1.4s ease-in-out 1;
+    animation: playful-left-leg var(--gesture-duration) ease-in-out 1;
   }
   .animated.character-play [data-limb="right-leg"] {
-    animation: playful-right-leg 1.4s ease-in-out 1;
+    animation: playful-right-leg var(--gesture-duration) ease-in-out 1;
+  }
+  @keyframes character-pop {
+    0%,
+    100% {
+      transform: translateY(0) scale(1);
+    }
+    14% {
+      transform: translateY(2px) scale(0.94);
+    }
+    34% {
+      transform: translateY(-12px) scale(1.08);
+    }
+    56% {
+      transform: translateY(-4px) scale(1.02);
+    }
+    72% {
+      transform: translateY(0) scale(0.99);
+    }
+    86% {
+      transform: translateY(-2px) scale(1.015);
+    }
+  }
+  @keyframes pencil-doodle {
+    0%,
+    25% {
+      opacity: 0;
+      stroke-dashoffset: 90;
+      transform: translateY(0);
+    }
+    38% {
+      opacity: 1;
+    }
+    65% {
+      opacity: 1;
+      stroke-dashoffset: 0;
+      transform: translateY(-14px);
+    }
+    85%,
+    100% {
+      opacity: 0;
+      stroke-dashoffset: 0;
+      transform: translateY(-20px);
+    }
   }
   @keyframes playful-pencil {
     0%,
     100% {
       transform: rotate(0deg);
     }
-    25% {
-      transform: rotate(-3deg);
+    14% {
+      transform: rotate(3deg);
     }
-    55% {
+    34% {
+      transform: rotate(-12deg);
+    }
+    52% {
+      transform: rotate(8deg);
+    }
+    72% {
+      transform: rotate(-5deg);
+    }
+    86% {
       transform: rotate(2deg);
-    }
-    78% {
-      transform: rotate(-1deg);
     }
   }
   @keyframes playful-nib {
@@ -762,14 +834,20 @@ dialog::backdrop {
     100% {
       transform: rotate(0deg);
     }
-    30% {
-      transform: rotate(3deg);
-    }
-    60% {
+    14% {
       transform: rotate(-2deg);
     }
-    80% {
-      transform: rotate(1deg);
+    36% {
+      transform: rotate(10deg);
+    }
+    54% {
+      transform: rotate(-7deg);
+    }
+    72% {
+      transform: rotate(5deg);
+    }
+    86% {
+      transform: rotate(-2deg);
     }
   }
   @keyframes playful-left-leg {
@@ -777,11 +855,17 @@ dialog::backdrop {
     100% {
       transform: rotate(0deg);
     }
-    40% {
-      transform: rotate(3deg);
+    14% {
+      transform: rotate(-2deg);
     }
-    70% {
-      transform: rotate(-1deg);
+    36% {
+      transform: rotate(10deg);
+    }
+    56% {
+      transform: rotate(-4deg);
+    }
+    76% {
+      transform: rotate(2deg);
     }
   }
   @keyframes playful-right-leg {
@@ -789,11 +873,17 @@ dialog::backdrop {
     100% {
       transform: rotate(0deg);
     }
-    40% {
-      transform: rotate(-3deg);
+    14% {
+      transform: rotate(2deg);
     }
-    70% {
-      transform: rotate(1deg);
+    36% {
+      transform: rotate(-10deg);
+    }
+    56% {
+      transform: rotate(4deg);
+    }
+    76% {
+      transform: rotate(-2deg);
     }
   }
   @keyframes left-step {
