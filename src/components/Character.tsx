@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import originalCharacter from "../../public/Asset 2.svg?raw";
 import { content, type Lang } from "../content";
+import { restingStoryline, useStoryline } from "./useStoryline";
 
 // Use the uploaded SVG verbatim. Only the XML prolog is omitted for inline HTML.
 const artwork = originalCharacter.replace(/<\?xml[^?]*\?>\s*/, "");
 
 export function Character({ lang, motion }: { lang: Lang; motion: boolean }) {
   const illustration = useRef<HTMLButtonElement>(null);
+  const storyline = useRef<SVGPathElement>(null);
   type Phase = "entrance" | "idle" | "settle" | "play";
   const [phase, setPhase] = useState<Phase>(() =>
     motion && !window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -123,6 +125,8 @@ export function Character({ lang, motion }: { lang: Lang; motion: boolean }) {
       limbs.forEach(([index]) => parts[index].removeAttribute("data-limb"));
   }, []);
 
+  useStoryline(illustration, storyline, phaseRef, motion);
+
   return (
     <figure
       className={`character ${motion ? "animated" : ""} character-${phase}`}
@@ -135,8 +139,9 @@ export function Character({ lang, motion }: { lang: Lang; motion: boolean }) {
           aria-hidden="true"
         >
           <path
+            ref={storyline}
             className="draw-line"
-            d="M174.2 72.6 C218 48 222 173 202 224 C181 278 130 285 91 268 C40 245 0 254 -66 299"
+            d={restingStoryline}
             stroke="#171717"
             strokeWidth="0.65"
             strokeLinecap="round"
