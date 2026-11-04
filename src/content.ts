@@ -152,23 +152,5 @@ export const content = {
   },
 };
 export type Localized = Record<Lang, string>;
-export interface Project {
-  id: string;
-  category: number;
-  theme: string;
-  title?: Localized;
-  concept?: Localized;
-  role?: Localized;
-  process?: Localized;
-  images?: { src: string; alt: Localized }[];
-}
-export const projects: Project[] = [
-  { id: "01", category: 0, theme: "blue" },
-  { id: "02", category: 1, theme: "paper" },
-  { id: "03", category: 2, theme: "ink" },
-  { id: "04", category: 0, theme: "red" },
-  { id: "05", category: 1, theme: "blueprint" },
-  { id: "06", category: 2, theme: "cream" },
-];
 // Add only verified contact URLs and an existing CV file. Empty values render as unavailable.
 export const contactLinks = { email: "", linkedin: "", behance: "", cv: "" };

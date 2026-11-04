@@ -1,1 +1,1 @@
-Place optimized real project covers, artwork and mockups here. Add bilingual titles, case-study text and image descriptions in src/content.ts.
+Place only approved, optimized public project artwork here. Edit project metadata, covers and images in src/data/projects.ts. Do not store confidential files or unreleased prototype/final-component imagery in public/. My Mood Box may use only explicitly approved early explorations; see the root README.

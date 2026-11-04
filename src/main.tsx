@@ -1,118 +1,61 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
-import {
-  content,
-  projects,
-  contactLinks,
-  type Lang,
-  type Project,
-} from "./content";
+import { content, contactLinks, type Lang } from "./content";
 import { Character } from "./components/Character";
+import { ProjectGallery } from "./components/ProjectGallery";
+import { ProjectCaseStudy } from "./components/ProjectCaseStudy";
+import { resolveProjectRoute } from "./data/projects";
 import "./style.css";
+import "./gallery.css";
 const anchors = ["home", "work", "about", "experience", "contact"];
-function Artwork({ project, label }: { project: Project; label: string }) {
-  return (
-    <div className={`artwork ${project.theme}`} aria-hidden="true">
-      <span className="art-number">{project.id}</span>
-      <svg viewBox="0 0 600 450" fill="none">
-        <path
-          d={
-            project.category === 0
-              ? "M-40 310C80 180 134 410 260 280S250 100 190 150S280 360 410 230S550 100 650 160"
-              : project.category === 1
-                ? "M160 345V110H350C475 110 475 255 350 255H160M350 255L450 345"
-                : "M90 320L220 100L350 320L480 100M85 345H500"
-          }
-          stroke="currentColor"
-          strokeWidth={project.category === 1 ? 2 : 3}
-        />
-        <circle
-          cx="420"
-          cy="130"
-          r="48"
-          stroke="currentColor"
-          strokeWidth="1"
-        />
-      </svg>
-      <span className="art-label">{label}</span>
-      <span className="art-plus">↗</span>
-    </div>
-  );
-}
-function CaseStudy({
-  project,
-  lang,
-  onClose,
-}: {
-  project: Project;
-  lang: Lang;
-  onClose: () => void;
-}) {
-  const d = useRef<HTMLDialogElement>(null);
-  const c = content[lang];
-  useEffect(() => {
-    d.current?.showModal();
-    const old = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = old;
-    };
-  }, []);
-  return (
-    <dialog
-      ref={d}
-      onCancel={onClose}
-      onClick={(e) => {
-        if (e.target === d.current) onClose();
-      }}
-      aria-labelledby="case-title"
-    >
-      <div className="case-inner">
-        <button className="close" onClick={onClose} aria-label={c.close}>
-          ×
-        </button>
-        <p className="eyebrow">{c.caseNote}</p>
-        <h2 id="case-title">
-          {project.title?.[lang] || `${c.project} ${project.id}`}
-        </h2>
-        <p>{c.filters[project.category]}</p>
-        <Artwork project={project} label={c.artwork} />
-        <div className="case-grid">
-          {[
-            [c.concept, project.concept?.[lang] || c.conceptPlaceholder],
-            [c.role, project.role?.[lang] || c.rolePlaceholder],
-            [c.process, project.process?.[lang] || c.processPlaceholder],
-            [c.final, c.finalPlaceholder],
-          ].map(([title, body]) => (
-            <section key={title}>
-              <h3>{title}</h3>
-              <p>{body}</p>
-            </section>
-          ))}
-        </div>
-        {project.images?.map((im) => (
-          <img
-            className="case-image"
-            key={im.src}
-            src={im.src}
-            alt={im.alt[lang]}
-            loading="lazy"
-          />
-        ))}
-        <button className="text-link" onClick={onClose}>
-          {c.close} ↗
-        </button>
-      </div>
-    </dialog>
-  );
-}
 function App() {
   const [lang, setLang] = useState<Lang>("en");
   const [motion, setMotion] = useState(
     () => !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
-  const [filter, setFilter] = useState(-1);
-  const [selected, setSelected] = useState<Project | null>(null);
+  const [hash, setHash] = useState(() => window.location.hash);
+  const route = resolveProjectRoute(hash);
+  const project = route.page === "project" ? route.project : undefined;
+  const previousProject = useRef<{
+    slug: string;
+    collection: "selected" | "playground";
+  } | null>(null);
+  useEffect(() => {
+    if (project) {
+      previousProject.current = {
+        slug: project.slug,
+        collection: project.collection,
+      };
+      return;
+    }
+    if (
+      route.page === "home" &&
+      previousProject.current &&
+      (hash === "" || hash === "#work" || hash === "#playground")
+    ) {
+      const target =
+        document.querySelector<HTMLAnchorElement>(
+          `a[href="#/projects/${previousProject.current.slug}"]`,
+        ) ??
+        document.getElementById(`${previousProject.current.collection}-title`);
+      target?.focus({ preventScroll: true });
+      if (hash === "") target?.scrollIntoView({ block: "center" });
+      previousProject.current = null;
+    }
+  }, [project, route.page, hash]);
+  useEffect(() => {
+    const update = () => setHash(window.location.hash);
+    window.addEventListener("hashchange", update);
+    return () => window.removeEventListener("hashchange", update);
+  }, []);
+  useEffect(() => {
+    if (route.page !== "home" || !hash.startsWith("#")) return;
+    const frame = requestAnimationFrame(() => {
+      const target = document.getElementById(hash.slice(1));
+      target?.scrollIntoView();
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [hash, route.page]);
   const [active, setActive] = useState("home");
   const c = content[lang];
   useEffect(() => {
@@ -121,10 +64,16 @@ function App() {
       lang === "en"
         ? "Safae Adel — One Line. Endless Stories."
         : "Safae Adel — Une ligne. Des histoires sans fin.";
+    if (project) document.title = `${project.title[lang]} — Safae Adel`;
     document
       .querySelector('meta[name="description"]')
-      ?.setAttribute("content", c.subtitle + " " + c.about);
-  }, [lang, c]);
+      ?.setAttribute(
+        "content",
+        project
+          ? `${project.title[lang]} — ${project.categoryLabel[lang]}`
+          : c.subtitle + " " + c.about,
+      );
+  }, [lang, c, project]);
   useEffect(() => {
     document.documentElement.dataset.motion = String(motion);
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -152,7 +101,16 @@ function App() {
   }, []);
   return (
     <>
-      <a className="skip" href="#main">
+      <a
+        className="skip"
+        href={route.page === "home" ? "#main" : "#case-main"}
+        onClick={(event) => {
+          event.preventDefault();
+          document
+            .getElementById(route.page === "home" ? "main" : "case-main")
+            ?.focus();
+        }}
+      >
         {c.skip}
       </a>
       <header>
@@ -168,7 +126,11 @@ function App() {
             <a
               key={anchors[i]}
               href={`#${anchors[i]}`}
-              aria-current={active === anchors[i] ? "location" : undefined}
+              aria-current={
+                route.page === "home" && active === anchors[i]
+                  ? "location"
+                  : undefined
+              }
             >
               {n}
             </a>
@@ -187,7 +149,7 @@ function App() {
           ))}
         </div>
       </header>
-      <main id="main">
+      <main id="main" tabIndex={-1} hidden={route.page !== "home"}>
         <section id="home" className="hero">
           <div className="hero-top">
             <p className="eyebrow">{c.eyebrow}</p>
@@ -232,60 +194,8 @@ function App() {
             </button>
           </div>
         </section>
-        <section id="work" className="work section">
-          <div className="section-top">
-            <p className="eyebrow">01 / {c.nav[1]}</p>
-            <span>↘</span>
-          </div>
-          <div className="section-heading">
-            <h2>
-              {c.work}
-              <span className="red-dot">.</span>
-            </h2>
-            <p>{c.workIntro}</p>
-          </div>
-          <div className="work-toolbar">
-            <p>{c.workNote}</p>
-            <div
-              className="filters"
-              role="group"
-              aria-label={
-                lang === "en" ? "Filter projects" : "Filtrer les projets"
-              }
-            >
-              {[c.all, ...c.filters].map((f, i) => (
-                <button
-                  key={f}
-                  aria-pressed={filter === i - 1}
-                  onClick={() => setFilter(i - 1)}
-                >
-                  {f}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="projects">
-            {projects
-              .filter((p) => filter === -1 || p.category === filter)
-              .map((p) => (
-                <button
-                  className="project-card"
-                  key={p.id}
-                  onClick={() => setSelected(p)}
-                  aria-label={`${c.open} — ${p.title?.[lang] || `${c.project} ${p.id}`}`}
-                >
-                  <Artwork project={p} label={c.artwork} />
-                  <div className="project-meta">
-                    <div>
-                      <h3>{p.title?.[lang] || `${c.project} ${p.id}`}</h3>
-                      <p>{c.filters[p.category]}</p>
-                    </div>
-                    <span>{c.soon} ↗</span>
-                  </div>
-                </button>
-              ))}
-          </div>
-        </section>
+        <ProjectGallery lang={lang} collection="selected" />
+        <ProjectGallery lang={lang} collection="playground" />
         <section id="about" className="about section">
           <p className="eyebrow">02 / {c.aboutLabel}</p>
           <div className="about-grid">
@@ -405,11 +315,12 @@ function App() {
           </footer>
         </section>
       </main>
-      {selected && (
-        <CaseStudy
-          project={selected}
+      {route.page !== "home" && (
+        <ProjectCaseStudy
+          project={project}
           lang={lang}
-          onClose={() => setSelected(null)}
+          motion={motion}
+          onMotion={() => setMotion(!motion)}
         />
       )}
     </>

@@ -22,11 +22,23 @@ The build is in `dist/`. Preview at desktop, tablet and mobile widths. External 
 
 ## Content editing
 
-`src/content.ts` contains the English/French dictionaries, six placeholder projects, character configuration and contact links. Default language is English. The navigation switch translates the entire interface, case studies and accessibility labels. Keep both language values in sync when editing. No client names, job titles or achievements have been invented.
+`src/content.ts` contains the original English/French site dictionary and contact links. `src/galleryContent.ts` contains bilingual gallery and case-study interface text; `src/data/projects.ts` contains the nine project records. Default language is English. The navigation switch translates the entire interface, case studies and accessibility labels. Keep both language values in sync when editing. No client names, job titles or achievements have been invented.
 
 ### Projects
 
-Edit `projects` in `src/content.ts`. Each item has a unique ID, category index (0 illustration, 1 branding, 2 graphic design) and a visual theme. Add bilingual `title`, `concept`, `role`, and `process` fields, e.g. `title: { en: 'Real title', fr: 'Titre réel' }`. Add images as `images: [{ src: '/assets/projects/example.webp', alt: { en: 'Describe the image', fr: 'Décrire l’image' } }]`. Put optimized artwork in `public/assets/projects/`. The case-study dialog automatically displays the real text and images. Replace the abstract thumbnail in `Artwork` in `src/main.tsx` with a supplied cover when ready. Current numbered visuals are layout placeholders, not claimed portfolio work.
+Edit `projects` in `src/data/projects.ts`. Each record has a stable `id` and `slug`, bilingual `title` and `categoryLabel`, a filter category, `collection` (`selected` or `playground`), numeric `order`, and a decorative card `treatment`/`tone`. These nine records use only supplied project names/categories. All numbered frames are clearly labelled neutral placeholders, not claimed project artwork.
+
+Standard projects use `kind: 'case-study'`. Add bilingual `concept`, `role`, and `process` fields only when supplied. Add `cover` and `images` with `{ src: '/assets/projects/example.webp', alt: { en: 'Describe the image', fr: 'Décrire l’image' }, caption: { en: 'Optional caption', fr: 'Légende facultative' } }`. Put optimized, approved artwork in `public/assets/projects/`. Images are displayed without cropping; cards load lazily. Never put confidential files anywhere in `public/` because Vite copies that entire directory to the build.
+
+My Mood Box is `kind: 'research-preview'`. Its reusable public layout contains only the research question, objectives and approved early explorations. The schema deliberately has no general cover, process or final-artwork fields for research previews. Set `researchQuestion` and `objectives` to supplied bilingual copy. Only approved early-exploration images may be added to `explorations`, and each must have `approved: true` after explicit content review. Both thumbnail and page rendering use the same allowlist; My Mood Box’s stable slug also enforces this restriction even if imported data is misclassified. Do not upload final prototype imagery or physical-component/assembly images to the public folder at all. No prototype imagery is included in this version.
+
+### Project routes and review
+
+Each card opens its own accessible page at `#/projects/<slug>`, for example `/#/projects/poms` and `/#/projects/my-mood-box`. Hash routing works with Vite, Codespaces and static hosting without rewrite rules. Direct links and refreshes work; browser Back/Forward and the page’s return/previous/next links navigate between projects. The EN/FR switch stays available and keeps the current project open. Unknown project links show a bilingual missing-project view. A shared case-study layout lives in `src/components/ProjectCaseStudy.tsx`; gallery/card components are in `src/components/ProjectGallery.tsx`, with scoped styles in `src/gallery.css`.
+
+The homepage stays mounted while a project page is open, preserving mascot state. Its original SVG, animation code, line-tracking hook and original stylesheet have not been changed for this gallery update. Returning to the gallery restores keyboard focus to the relevant card.
+
+Run `npm test` (Node 22.18+ recommended) for project ordering, bilingual metadata, route resolution, neutral imagery and research-image allowlist checks. Run `npm run build` for TypeScript and production verification. Manually review both collections at desktop/tablet/mobile widths, filter buttons, keyboard focus, reduced motion, direct project URLs, Back/Forward, and My Mood Box’s research-only page in both languages.
 
 ### Original character
 
@@ -52,7 +64,7 @@ Set `contactLinks.email` to an email address, and `linkedin`/`behance` to verifi
 
 The timeline is in `src/main.tsx`; all display strings are in `src/content.ts`. Confirm roles at Orange Creative and MADP, dates/details for other experiences, and add only verified information. Confirm the wording of degrees and doctoral research before publication.
 
-## Preview the character in GitHub Codespaces
+## Preview in GitHub Codespaces
 
 Open a Codespace on `feat/one-line-portfolio`. If you already have one, stop its running server with Ctrl+C, then run in its terminal:
 
@@ -67,15 +79,15 @@ Click **Open in Browser**, or open the **Ports** tab and click the globe beside 
 
 ## Review before merging
 
-Work is isolated on `feat/one-line-portfolio`. Review with `git diff main...feat/one-line-portfolio` (use the actual default branch if different). Run the build and inspect both languages, filters, each project dialog, Escape to close, keyboard navigation, mobile layout and reduced motion. Push the feature branch and open a pull request when ready; merge only after review. No deployment configuration or publishing action is included.
+Work is isolated on `feat/one-line-portfolio`. Review with `git diff main...feat/one-line-portfolio` (use the actual default branch if different). Run the build and inspect both languages, filters, each project page, Back/Forward, keyboard navigation, mobile layout and reduced motion. Push the feature branch and open a pull request when ready; merge only after review. No deployment configuration or publishing action is included.
 
 ## Still needed
 
 - Optional original flowing-line motif (the final character is integrated; no alternative expressions are needed).
-- Six real project titles, categories, briefs, roles, process documentation, covers, final artwork and alt text, in English and French.
+- Approved imagery and bilingual case-study briefs, roles, process documentation and captions for the nine named projects. My Mood Box needs only its research question, objectives and approved early explorations.
 - Verified professional details for timeline entries.
 - Email, LinkedIn, Behance and downloadable CV PDF.
 
 ## Implementation
 
-Reusable character, artwork and dialog components; native modal focus management; semantic landmarks; visible focus; touch-friendly controls; reduced motion; scroll reveals and subtle limb-only character animation. The palette is ivory `#F6F4F0`, ink `#171717`, cobalt `#1646B7` and sparing vermilion `#E34B37`. Layout graphics are inline SVG, and no image-generation service was used.
+Reusable character, gallery, card and project-page components; route focus management; semantic landmarks; visible focus; touch-friendly controls; reduced motion; scroll reveals and subtle limb-only character animation. The palette is ivory `#F6F4F0`, ink `#171717`, cobalt `#1646B7` and sparing vermilion `#E34B37`. Layout graphics are inline SVG, and no image-generation service was used.
