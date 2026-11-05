@@ -126,7 +126,7 @@
 }
 .gallery-card-meta h3 {
   font:
-    500 clamp(18px, 1.8vw, 27px)/1.3 Manrope,
+    600 clamp(18px, 1.8vw, 27px)/1.3 Manrope,
     Arial,
     sans-serif;
   letter-spacing: -0.6px;
