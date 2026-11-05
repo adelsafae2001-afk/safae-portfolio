@@ -35,9 +35,6 @@ export function ProjectPreview({
         />
       ) : (
         <>
-          <span className="preview-registration" aria-hidden="true">
-            SA
-          </span>
           <span className="preview-frame" aria-hidden="true" />
           <span className="preview-placeholder">
             {c.imagePlaceholder}
@@ -110,7 +107,6 @@ export function ProjectGallery({
             >
               <ProjectPreview project={p} lang={lang} />
               <div className="gallery-card-meta">
-                <span className="gallery-index" aria-hidden="true" />
                 <div>
                   <h3>{p.title[lang]}</h3>
                   <p>{p.categoryLabel[lang]}</p>

@@ -53,14 +53,6 @@
   display: block;
   transition: transform 0.6s ease;
 }
-.preview-registration {
-  position: absolute;
-  top: 24px;
-  left: 24px;
-  font: 10px monospace;
-  letter-spacing: 1px;
-  opacity: 0.7;
-}
 .preview-frame {
   position: absolute;
   inset: 19% 20% 25%;
@@ -106,14 +98,10 @@
 }
 .gallery-card-meta {
   display: grid;
-  grid-template-columns: 22px 1fr 20px;
+  grid-template-columns: minmax(0, 1fr) 20px;
   gap: 12px;
-  margin-top: 20px;
+  margin-top: 12px;
   align-items: baseline;
-}
-.gallery-index {
-  color: #1646b7;
-  font-size: 9px;
 }
 .gallery-card-meta h3 {
   font:
@@ -126,7 +114,7 @@
   font-size: 11px;
   color: #66615c;
   line-height: 1.7;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 .gallery-card-action {
   font-size: 18px;
@@ -284,12 +272,8 @@
   bottom: 20px;
   font-size: 9px;
 }
-.playground-grid .preview-registration {
-  left: 18px;
-  top: 20px;
-}
 .playground-grid .gallery-card-meta {
-  grid-template-columns: 18px 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 6px;
 }
 .playground-grid .gallery-card-action {
@@ -467,7 +451,7 @@
     padding-top: 50px;
   }
   .playground-grid .gallery-card-meta {
-    grid-template-columns: 22px 1fr 20px;
+    grid-template-columns: minmax(0, 1fr) 20px;
     gap: 12px;
   }
   .playground-grid .gallery-card-action {
