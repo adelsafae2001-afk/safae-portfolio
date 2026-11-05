@@ -535,3 +535,44 @@
     animation: none !important;
   }
 }
+
+/* POMS case study only; gallery card geometry and styles stay unchanged. */
+.case-page[data-project="poms"] article > .gallery-preview {
+  background: transparent;
+  color: #171717;
+  aspect-ratio: auto;
+}
+.case-page[data-project="poms"] article > .gallery-preview > img {
+  height: auto;
+  padding: 0;
+}
+.case-page[data-project="poms"] .case-recognition {
+  border-top: 1px solid #d6d3ce;
+  padding-top: 32px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 30px;
+}
+.case-page[data-project="poms"] .recognition-details h3 {
+  font: 600 24px/1.4 Manrope, Arial, sans-serif;
+  letter-spacing: -.5px;
+}
+.case-page[data-project="poms"] .recognition-details p {
+  font-size: 14px;
+  line-height: 1.7;
+  margin-top: 8px;
+}
+.case-page[data-project="poms"] .recognition-details p + p {
+  color: #66615c;
+  font-size: 12px;
+}
+.case-page[data-project="poms"] .recognition-details .text-link {
+  display: inline-block;
+  margin-top: 18px;
+}
+@media (max-width: 700px) {
+  .case-page[data-project="poms"] .case-recognition {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}

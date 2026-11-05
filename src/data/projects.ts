@@ -34,7 +34,13 @@ export interface StandardProject extends ProjectBase {
   role?: Localized;
   process?: Localized;
   images?: ProjectImage[];
-  recognition?: { description: Localized; image: ProjectImage };
+  applications?: { title: Localized; description: Localized };
+  recognition?: {
+    title: Localized;
+    event: string;
+    category: Localized;
+    link: { href: string; label: Localized };
+  };
 }
 // Research previews deliberately have no cover, final artwork, mockup or general
 // image fields. Only specifically approved early explorations may be rendered.
@@ -57,16 +63,40 @@ export const projects: Project[] = [
         fr: "Canette de boisson pétillante POMS à la pomme, avec un personnage de pomme rouge illustré et des gouttelettes, sur fond blanc",
       },
     },
-    recognition: {
-      description: {
-        en: "First Prize Winner in Morocco — Visual Packaging category, Arab Student StarPack 2024.",
-        fr: "Premier prix au Maroc — catégorie « Visual Packaging », Arab Student StarPack 2024.",
+    concept: {
+      en: "The goal was to redesign POMS, an existing Moroccan apple-flavoured soft drink, to give it a stronger and more distinctive presence on store shelves. I created a playful visual direction built around bold colours, expressive typography, and an illustrated apple character named TFa7a.",
+      fr: "L’objectif était de repenser le packaging de POMS, une boisson gazeuse marocaine à la pomme, pour lui donner une présence plus forte et singulière en rayon. J’ai créé un univers visuel ludique autour de couleurs franches, d’une typographie expressive et d’un personnage de pomme illustré nommé TFa7a.",
+    },
+    role: {
+      en: "Independent project — packaging redesign, visual identity, character illustration, and mockup development.",
+      fr: "Projet indépendant — refonte du packaging, identité visuelle, illustration de personnage et réalisation de mockups.",
+    },
+    process: {
+      en: "The original packaging didn't stand out enough among competing drinks. I wanted to create something more recognizable and unexpected, so I explored a fresh colour palette, expressive typography, and a playful mascot. Together, these elements give POMS a more distinctive personality while keeping the product recognizable.",
+      fr: "Le packaging d’origine se distinguait trop peu des boissons concurrentes. Pour créer une identité plus reconnaissable et inattendue, j’ai exploré une nouvelle palette de couleurs, une typographie expressive et une mascotte ludique. Ensemble, ces éléments donnent à POMS une personnalité plus affirmée, tout en préservant la reconnaissance du produit.",
+    },
+    applications: {
+      title: {
+        en: "Visual identity & applications",
+        fr: "Identité visuelle et applications",
       },
-      image: {
-        src: "/assets/projects/poms-award.png",
-        alt: {
-          en: "POMS recognition: First Prize Winner in Morocco, Visual Packaging category, Arab Student StarPack 2024",
-          fr: "Distinction POMS : premier prix au Maroc, catégorie Visual Packaging, Arab Student StarPack 2024",
+      description: {
+        en: "From the TFa7a character to the packaging design, each visual element was developed to give POMS a playful and recognizable identity. The redesign was explored across can and bottle mockups.",
+        fr: "Du personnage TFa7a au design du packaging, chaque élément visuel a été conçu pour donner à POMS une identité ludique et reconnaissable. La refonte a été explorée à travers des mockups de canettes et de bouteilles.",
+      },
+    },
+    recognition: {
+      title: { en: "First Prize Winner — Morocco", fr: "Premier prix — Maroc" },
+      event: "Arab Student StarPack 2024",
+      category: {
+        en: "Visual Packaging Category",
+        fr: "Catégorie Visual Packaging",
+      },
+      link: {
+        href: "https://www.arabstarpack.org/Student/en/winners/2024/",
+        label: {
+          en: "View official winners",
+          fr: "Voir les lauréats officiels",
         },
       },
     },

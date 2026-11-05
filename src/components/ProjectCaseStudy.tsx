@@ -35,7 +35,12 @@ export function ProjectCaseStudy({
   const images = project ? publicProjectImages(project) : [];
   const back = project?.collection === "playground" ? "#playground" : "#work";
   return (
-    <main id="case-main" className="case-page" tabIndex={-1}>
+    <main
+      id="case-main"
+      className="case-page"
+      data-project={project?.slug}
+      tabIndex={-1}
+    >
       <div className="case-toolbar">
         <a className="text-link" href={back}>
           ← {c.back}
@@ -50,13 +55,15 @@ export function ProjectCaseStudy({
         </button>
       </div>
       <article>
-        <p className="eyebrow">
-          {project
-            ? isResearchPreview(project)
-              ? c.researchNote
-              : c.caseNote
-            : "404"}
-        </p>
+        {project?.slug !== "poms" && (
+          <p className="eyebrow">
+            {project
+              ? isResearchPreview(project)
+                ? c.researchNote
+                : c.caseNote
+              : "404"}
+          </p>
+        )}
         <h1 className="case-page-title" ref={heading} tabIndex={-1}>
           {project?.title[lang] ?? c.notFound}
         </h1>
@@ -115,8 +122,12 @@ export function ProjectCaseStudy({
                   ))}
                 </div>
                 <section className="case-artworks">
-                  <h2>{c.final}</h2>
-                  {images.length === 0 && <p>{c.finalPlaceholder}</p>}
+                  <h2>{project.applications?.title[lang] ?? c.final}</h2>
+                  {project.applications ? (
+                    <p>{project.applications.description[lang]}</p>
+                  ) : (
+                    images.length === 0 && <p>{c.finalPlaceholder}</p>
+                  )}
                 </section>
               </>
             )}
@@ -139,15 +150,20 @@ export function ProjectCaseStudy({
                 aria-labelledby="recognition-title"
               >
                 <h2 id="recognition-title">{c.recognition}</h2>
-                <p>{project.recognition.description[lang]}</p>
-                <figure className="case-artwork">
-                  <img
-                    src={project.recognition.image.src}
-                    alt={project.recognition.image.alt[lang]}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </figure>
+                <div className="recognition-details">
+                  <h3>{project.recognition.title[lang]}</h3>
+                  <p>{project.recognition.event}</p>
+                  <p>{project.recognition.category[lang]}</p>
+                  <a
+                    className="text-link"
+                    href={project.recognition.link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {project.recognition.link.label[lang]}{" "}
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                </div>
               </section>
             )}
           </>
