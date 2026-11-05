@@ -105,7 +105,20 @@ export function ProjectCaseStudy({
               </>
             ) : (
               <>
-                {!comic && (
+                {comic ? (
+                  project.cover && (
+                    <figure className="case-artwork comic-cover">
+                      <img
+                        src={project.cover.src}
+                        alt={project.cover.alt[lang]}
+                        width={project.cover.width}
+                        height={project.cover.height}
+                        loading="eager"
+                        decoding="async"
+                      />
+                    </figure>
+                  )
+                ) : (
                   <ProjectPreview project={project} lang={lang} priority />
                 )}
                 <div className="case-sections">

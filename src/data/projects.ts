@@ -178,7 +178,15 @@ export const projects: Project[] = [
     slug: "the-tale-of-the-lost-princess",
     presentation: "comic",
     completed: true,
-    cover: comicPages[0],
+    cover: {
+      src: "/assets/projects/Le conte de la princesse perdue.png",
+      width: 1671,
+      height: 941,
+      alt: {
+        en: "The Tale of the Lost Princess — original black-and-white title cover",
+        fr: "Le Conte de la Princesse Perdue — couverture originale en noir et blanc",
+      },
+    },
     images: comicPages,
     concept: {
       en: "The Tale of the Lost Princess is an original five-page fantasy comic set in a medieval-inspired world. Through expressive characters, detailed environments, and dynamic panel compositions, the project explores how illustrations can bring a story to life.",

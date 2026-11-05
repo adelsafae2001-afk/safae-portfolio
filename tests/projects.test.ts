@@ -112,7 +112,18 @@ test("the completed comic uses the five unchanged original pages in reading orde
   assert.equal(comic.completed, true);
   const pages = publicProjectImages(comic);
   assert.equal(pages.length, 5);
-  assert.equal(publicProjectCover(comic), pages[0]);
+  const cover = publicProjectCover(comic)!;
+  assert.equal(
+    cover.src,
+    "/assets/projects/Le conte de la princesse perdue.png",
+  );
+  assert.notEqual(cover.src, pages[0].src);
+  const coverBytes = readFileSync(
+    new URL(`../public${cover.src}`, import.meta.url),
+  );
+  assert.equal(coverBytes.readUInt32BE(16), cover.width);
+  assert.equal(coverBytes.readUInt32BE(20), cover.height);
+  assert.equal([cover, ...pages].length, 6);
   pages.forEach((image, index) => {
     assert.equal(image.src, `/assets/projects/Artboard ${index + 1}.png`);
     const bytes = readFileSync(
