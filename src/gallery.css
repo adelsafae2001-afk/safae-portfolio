@@ -42,6 +42,11 @@
   background: #1646b7;
   color: #f6f4f0;
 }
+/* Blend the POMS surround into its original white cover without resizing it. */
+.gallery-card[href="#/projects/poms"] .gallery-preview {
+  background: #fff;
+  color: #171717;
+}
 .tone-ink {
   background: #171717;
   color: #f6f4f0;
