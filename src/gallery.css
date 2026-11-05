@@ -42,10 +42,21 @@
   background: #1646b7;
   color: #f6f4f0;
 }
-/* Blend the POMS surround into its original white cover without resizing it. */
-.gallery-card[href="#/projects/poms"] .gallery-preview {
-  background: #fff;
+/* Let the POMS gallery image define its natural height: no fixed-ratio
+   letterboxing or frame. Visible overflow preserves the existing hover zoom. */
+.portfolio-gallery .gallery-card[href="#/projects/poms"] .gallery-preview {
+  aspect-ratio: auto;
+  background: transparent;
   color: #171717;
+  overflow: visible;
+}
+.portfolio-gallery .gallery-card[href="#/projects/poms"] .gallery-preview > img {
+  width: 100%;
+  height: auto;
+  padding: 0;
+}
+.portfolio-gallery .gallery-card[href="#/projects/poms"] .preview-arrow {
+  display: none;
 }
 .tone-ink {
   background: #171717;
