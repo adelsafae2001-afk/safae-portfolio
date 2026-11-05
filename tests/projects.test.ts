@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
@@ -100,4 +101,25 @@ test("an unreleased prototype without explicit approvals renders no images", () 
   } as unknown as Project;
   assert.equal(publicProjectCover(imported), undefined);
   assert.deepEqual(publicProjectImages(imported), []);
+});
+
+test("the completed comic uses the five unchanged original pages in reading order", () => {
+  const comic = projects.find(
+    (project) => project.slug === "the-tale-of-the-lost-princess",
+  )!;
+  assert.ok(comic.kind === "case-study");
+  assert.equal(comic.presentation, "comic");
+  assert.equal(comic.completed, true);
+  const pages = publicProjectImages(comic);
+  assert.equal(pages.length, 5);
+  assert.equal(publicProjectCover(comic), pages[0]);
+  pages.forEach((image, index) => {
+    assert.equal(image.src, `/assets/projects/Artboard ${index + 1}.png`);
+    const bytes = readFileSync(
+      new URL(`../public${image.src}`, import.meta.url),
+    );
+    assert.equal(bytes.readUInt32BE(16), image.width);
+    assert.equal(bytes.readUInt32BE(20), image.height);
+    assert.ok(image.alt.en && image.alt.fr);
+  });
 });

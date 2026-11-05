@@ -576,3 +576,19 @@
     gap: 20px;
   }
 }
+
+/* Original comic pages: one uninterrupted reading sequence, never cropped. */
+.case-page[data-project="the-tale-of-the-lost-princess"] .case-artwork {
+  max-width: 960px;
+  margin: clamp(40px, 6vw, 80px) auto 0;
+}
+.case-page[data-project="the-tale-of-the-lost-princess"] .case-artwork img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+/* Keep the existing cover zoom while allowing its full page to remain visible. */
+.gallery-card[href="#/projects/the-tale-of-the-lost-princess"] .gallery-preview {
+  overflow: visible;
+}

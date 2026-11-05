@@ -6,6 +6,8 @@ export interface ProjectImage {
   src: string;
   alt: Localized;
   caption?: Localized;
+  width?: number;
+  height?: number;
 }
 interface ProjectBase {
   id: string;
@@ -29,6 +31,9 @@ interface ProjectBase {
 }
 export interface StandardProject extends ProjectBase {
   kind: "case-study";
+  presentation?: "comic";
+  completed?: boolean;
+  processTitle?: Localized;
   cover?: ProjectImage;
   concept?: Localized;
   role?: Localized;
@@ -51,6 +56,21 @@ export interface ResearchProject extends ProjectBase {
   explorations?: (ProjectImage & { approved: true })[];
 }
 export type Project = StandardProject | ResearchProject;
+const comicPages: ProjectImage[] = [
+  { width: 739, height: 1519 },
+  { width: 1088, height: 953 },
+  { width: 845, height: 1213 },
+  { width: 886, height: 1226 },
+  { width: 886, height: 1417 },
+].map((size, index) => ({
+  src: `/assets/projects/Artboard ${index + 1}.png`,
+  ...size,
+  alt: {
+    en: `The Tale of the Lost Princess — original fantasy comic, page ${index + 1} of 5`,
+    fr: `Le Conte de la Princesse Perdue — bande dessinée fantastique originale, page ${index + 1} sur 5`,
+  },
+}));
+
 export const projects: Project[] = [
   {
     id: "01",
@@ -156,14 +176,38 @@ export const projects: Project[] = [
   {
     id: "05",
     slug: "the-tale-of-the-lost-princess",
+    presentation: "comic",
+    completed: true,
+    cover: comicPages[0],
+    images: comicPages,
+    concept: {
+      en: "The Tale of the Lost Princess is an original five-page fantasy comic set in a medieval-inspired world. Through expressive characters, detailed environments, and dynamic panel compositions, the project explores how illustrations can bring a story to life.",
+      fr: "Le Conte de la Princesse Perdue est une bande dessinée fantastique originale de cinq pages, située dans un univers d’inspiration médiévale. À travers des personnages expressifs, des décors détaillés et une composition dynamique des cases, ce projet explore la manière dont l’illustration peut donner vie à une histoire.",
+    },
+    role: {
+      en: "Independent project — original story, character design, illustration, and sequential storytelling.",
+      fr: "Projet indépendant — scénario original, conception des personnages, illustration et narration séquentielle.",
+    },
+    processTitle: { en: "Creative process", fr: "Processus de création" },
+    process: {
+      en: "I developed the story and its characters, then translated the narrative into five illustrated comic pages. Each composition was designed to guide the reader through the story using character expressions, visual details, and the rhythm of the panels.",
+      fr: "J’ai développé l’histoire et ses personnages, puis transposé le récit en cinq planches illustrées. Chaque composition a été pensée pour guider la lecture à travers les expressions des personnages, les détails visuels et le rythme des cases.",
+    },
+    applications: {
+      title: { en: "Final artwork", fr: "Illustrations finales" },
+      description: {
+        en: "Five completed, original comic pages presented in their intended reading order.",
+        fr: "Cinq planches originales achevées, présentées dans leur ordre de lecture.",
+      },
+    },
     title: {
       en: "The Tale of the Lost Princess",
       fr: "Le Conte de la Princesse Perdue",
     },
     category: "illustration",
     categoryLabel: {
-      en: "Comic Illustration",
-      fr: "Illustration de bande dessinée",
+      en: "Comic Illustration & Visual Storytelling",
+      fr: "Illustration de bande dessinée et narration visuelle",
     },
     collection: "selected",
     order: 5,

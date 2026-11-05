@@ -22,6 +22,9 @@ export function ProjectCaseStudy({
   onMotion: () => void;
 }) {
   const c = galleryContent[lang];
+  const comic =
+    project && !isResearchPreview(project) && project.presentation === "comic";
+  const completed = project && !isResearchPreview(project) && project.completed;
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -55,7 +58,7 @@ export function ProjectCaseStudy({
         </button>
       </div>
       <article>
-        {project?.slug !== "poms" && (
+        {project?.slug !== "poms" && !completed && (
           <p className="eyebrow">
             {project
               ? isResearchPreview(project)
@@ -102,7 +105,9 @@ export function ProjectCaseStudy({
               </>
             ) : (
               <>
-                <ProjectPreview project={project} lang={lang} priority />
+                {!comic && (
+                  <ProjectPreview project={project} lang={lang} priority />
+                )}
                 <div className="case-sections">
                   {[
                     [
@@ -111,7 +116,7 @@ export function ProjectCaseStudy({
                     ],
                     [c.role, project.role?.[lang] ?? c.rolePlaceholder],
                     [
-                      c.process,
+                      project.processTitle?.[lang] ?? c.process,
                       project.process?.[lang] ?? c.processPlaceholder,
                     ],
                   ].map(([title, text]) => (
@@ -136,6 +141,8 @@ export function ProjectCaseStudy({
                 <img
                   src={image.src}
                   alt={image.alt[lang]}
+                  width={image.width}
+                  height={image.height}
                   loading="lazy"
                   decoding="async"
                 />
