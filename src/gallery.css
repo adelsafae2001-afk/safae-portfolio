@@ -53,6 +53,11 @@
   display: block;
   transition: transform 0.6s ease;
 }
+/* Reserve a small inset for the existing 1.025 hover zoom: the original
+   POMS image stays fully visible even while the card's image is enlarged. */
+.gallery-preview > img[src="/assets/projects/poms-cover.png"] {
+  padding: 1.25%;
+}
 .preview-frame {
   position: absolute;
   inset: 19% 20% 25%;

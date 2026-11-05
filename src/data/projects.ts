@@ -49,6 +49,13 @@ export const projects: Project[] = [
     id: "01",
     slug: "poms",
     title: { en: "POMS", fr: "POMS" },
+    cover: {
+      src: "/assets/projects/poms-cover.png",
+      alt: {
+        en: "POMS apple sparkling drink can with an illustrated red apple character and condensation, on a white background",
+        fr: "Canette de boisson pétillante POMS à la pomme, avec un personnage de pomme rouge illustré et des gouttelettes, sur fond blanc",
+      },
+    },
     category: "packaging",
     categoryLabel: { en: "Packaging Redesign", fr: "Refonte de packaging" },
     collection: "selected",
