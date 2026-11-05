@@ -380,6 +380,9 @@
   text-transform: uppercase;
   letter-spacing: 1px;
 }
+.case-recognition {
+  margin-top: 60px;
+}
 .case-artwork {
   margin-top: 35px;
 }

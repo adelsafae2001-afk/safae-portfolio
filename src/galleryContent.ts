@@ -30,6 +30,7 @@ export const galleryContent = {
     role: "My role",
     process: "Design process",
     final: "Artwork & mockups",
+    recognition: "Recognition",
     conceptPlaceholder:
       "The project brief and creative concept will be added here.",
     rolePlaceholder: "Role and responsibilities to be supplied.",
@@ -84,6 +85,7 @@ export const galleryContent = {
     role: "Mon rôle",
     process: "Processus de création",
     final: "Visuels et mises en situation",
+    recognition: "Distinction",
     conceptPlaceholder:
       "Le brief et le concept créatif du projet seront ajoutés ici.",
     rolePlaceholder: "Rôle et responsabilités à fournir.",

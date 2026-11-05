@@ -133,6 +133,23 @@ export function ProjectCaseStudy({
                 )}
               </figure>
             ))}
+            {!isResearchPreview(project) && project.recognition && (
+              <section
+                className="case-recognition"
+                aria-labelledby="recognition-title"
+              >
+                <h2 id="recognition-title">{c.recognition}</h2>
+                <p>{project.recognition.description[lang]}</p>
+                <figure className="case-artwork">
+                  <img
+                    src={project.recognition.image.src}
+                    alt={project.recognition.image.alt[lang]}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </figure>
+              </section>
+            )}
           </>
         )}
       </article>

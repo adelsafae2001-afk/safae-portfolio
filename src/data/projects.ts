@@ -34,6 +34,7 @@ export interface StandardProject extends ProjectBase {
   role?: Localized;
   process?: Localized;
   images?: ProjectImage[];
+  recognition?: { description: Localized; image: ProjectImage };
 }
 // Research previews deliberately have no cover, final artwork, mockup or general
 // image fields. Only specifically approved early explorations may be rendered.
@@ -54,6 +55,19 @@ export const projects: Project[] = [
       alt: {
         en: "POMS apple sparkling drink can with an illustrated red apple character and condensation, on a white background",
         fr: "Canette de boisson pétillante POMS à la pomme, avec un personnage de pomme rouge illustré et des gouttelettes, sur fond blanc",
+      },
+    },
+    recognition: {
+      description: {
+        en: "First Prize Winner in Morocco — Visual Packaging category, Arab Student StarPack 2024.",
+        fr: "Premier prix au Maroc — catégorie « Visual Packaging », Arab Student StarPack 2024.",
+      },
+      image: {
+        src: "/assets/projects/poms-award.png",
+        alt: {
+          en: "POMS recognition: First Prize Winner in Morocco, Visual Packaging category, Arab Student StarPack 2024",
+          fr: "Distinction POMS : premier prix au Maroc, catégorie Visual Packaging, Arab Student StarPack 2024",
+        },
       },
     },
     category: "packaging",
